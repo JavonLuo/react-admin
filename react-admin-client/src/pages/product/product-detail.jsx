@@ -9,7 +9,7 @@ export default class ProductDetail extends Component {
         categoryName2:''
     }
    async componentDidMount(){
-        let {categoryId,pCategoryId} = this.props.location.state.pruduct
+        let {categoryId,pCategoryId} = this.props.location.state.product
         // console.log(categoryId,pCategoryId);
         // 如果父Id等于0 说明是一级分类下的商品 否则是二级分类下的商品
         if(pCategoryId==='0'){
@@ -28,7 +28,7 @@ export default class ProductDetail extends Component {
     }
     render() {
         // ,imgs,categoryId,pCategoryId,status
-        let {name,desc,price,detail,imgs} = this.props.location.state.pruduct
+        let {name,desc,price,detail,imgs} = this.props.location.state.product
         let {categoryName1,categoryName2} = this.state
         const title = (
             <span style={{fontSize:20}}>
