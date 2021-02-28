@@ -10,7 +10,7 @@ export default class ProductDetail extends Component {
     }
    async componentDidMount(){
         let {categoryId,pCategoryId} = this.props.location.state.pruduct
-        console.log(categoryId,pCategoryId);
+        // console.log(categoryId,pCategoryId);
         // 如果父Id等于0 说明是一级分类下的商品 否则是二级分类下的商品
         if(pCategoryId==='0'){
            const result = await reqCategoryById(categoryId)

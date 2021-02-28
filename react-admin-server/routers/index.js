@@ -157,6 +157,18 @@ router.post('/manage/category/add', (req, res) => {
     })
 })
 
+// 删除分类
+router.post('/manage/category/delete', (req, res) => {
+  const { _id } =req.body
+  CategoryModel.deleteOne({_id})
+    .then((doc) => {
+      res.send({status: 0, msg: '删除成功！'})
+    })
+    .catch((err) => {
+      res.send({status: 1, msg: '删除失败, 请重新尝试'})
+    })
+})
+
 // 获取分类列表
 router.get('/manage/category/list', (req, res) => {
   const parentId = req.query.parentId || '0'

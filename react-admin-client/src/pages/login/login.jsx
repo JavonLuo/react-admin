@@ -48,10 +48,7 @@ render() {
         <Form onSubmit={this.handleSubmit} className="login-form">
             <Form.Item>
             {getFieldDecorator('username', {
-            rules: [{ required: true,whitespace:true,message: '用户名必须输入!' },
-                    { min: 4, message: '用户名最少4位!' },
-                    { max: 12, message: '用户名最多十二位!' },
-                    { pattern: /^[a-zA-Z0-9_]+$/, message: '用户名必须是英文、数字或者下划线组成!' },],
+            rules: [{ required: true,whitespace:true,message: '用户名必须输入!' }],
                     initialValue: 'admin'
           })(
             <Input

@@ -40,6 +40,7 @@ class UserForm extends PureComponent {
           {
             getFieldDecorator('username', {
               initialValue: user.username,
+              rules: [{ required: true, message: '用户名不能为空!' }]
             })(
               <Input placeholder='请输入用户名'/>
             )
@@ -52,6 +53,10 @@ class UserForm extends PureComponent {
               {
                 getFieldDecorator('password', {
                   initialValue: user.password,
+                  rules: [{ required: true,whitespace:true,message: '密码必须输入!' },
+                    { min: 4, message: '密码最少4位!' },
+                    { max: 12, message: '密码最多十二位!' },
+                    { pattern: /^[a-zA-Z0-9_]+$/, message: '密码必须是英文、数字或者下划线组成!' },]
                 })(
                   <Input type='password' placeholder='请输入密码'/>
                 )
@@ -83,6 +88,7 @@ class UserForm extends PureComponent {
           {
             getFieldDecorator('role_id', {
               initialValue: user.role_id,
+              rules: [{ required: true, message: '用户名不能为空!' }]
             })(
               <Select>
                 {

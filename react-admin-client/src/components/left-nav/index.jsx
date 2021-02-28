@@ -82,7 +82,7 @@ render() {
         <Link to='/' className={style.leftNav}>
         <header>
         <img src={logo} alt=""/>
-        <h1>React后台</h1>
+        <h1>React 后台</h1>
         </header>
         </Link>
       <Menu
