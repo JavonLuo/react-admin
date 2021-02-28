@@ -14,6 +14,8 @@ export const reqDelCategory = (_id) => ajax('/admin/manage/category/delete', { _
 export const reqUpdateCategory = (categoryId, categoryName) => ajax('/admin/manage/category/update', { categoryId, categoryName }, 'POST')
 // 获取商品列表
 export const reqProducts = (pageNum, pageSize) => ajax('/admin/manage/product/list', { pageNum, pageSize })
+// 删除商品
+export const reqDelProduct = (_id) => ajax('/admin/manage/product/delete', { _id }, 'POST')
 // 搜索商品分页列表
 export const reqSearchProducts = ({ pageNum, pageSize, searchName, searchType }) => ajax('/admin/manage/product/search', {
     pageNum,

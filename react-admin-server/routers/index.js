@@ -160,13 +160,28 @@ router.post('/manage/category/add', (req, res) => {
 // 删除分类
 router.post('/manage/category/delete', (req, res) => {
   const { _id } =req.body
-  CategoryModel.deleteOne({_id})
-    .then((doc) => {
-      res.send({status: 0, msg: '删除成功！'})
-    })
-    .catch((err) => {
-      res.send({status: 1, msg: '删除失败, 请重新尝试'})
-    })
+  ProductModel.find({})
+  .then(products => {
+    const product = products.find((item) => item.categoryId === _id || item.pCategoryId === _id)
+    if (product) {
+      res.send({status: 1, msg: '该分类下存在数据不允许删除！'})
+    } else {
+      CategoryModel.find({parentId: _id}).then((categorys) => {
+        if (categorys && categorys.length) {
+          res.send({status: 1, msg: '该分类下存在子分类，不允许删除！'})
+        } else {
+          CategoryModel.deleteOne({_id})
+          .then((doc) => {
+            res.send({status: 0, msg: '删除成功！'})
+          })
+          .catch((err) => {
+            res.send({status: 1, msg: '删除失败, 请重新尝试'})
+          })
+        }
+      })
+    }
+  })
+
 })
 
 // 获取分类列表
@@ -220,6 +235,17 @@ router.post('/manage/product/add', (req, res) => {
       console.error('添加产品异常', error)
       res.send({status: 1, msg: '添加产品异常, 请重新尝试'})
     })
+})
+// 删除产品
+router.post('/manage/product/delete', (req, res) => {
+  const { _id } = req.body
+  ProductModel.deleteOne({_id})
+  .then((doc) => {
+    res.send({status: 0, msg: '删除成功！'})
+  })
+  .catch((err) => {
+    res.send({status: 1, msg: '删除失败, 请重新尝试'})
+  })
 })
 
 // 获取产品分页列表

@@ -25,7 +25,7 @@ export default class Category extends Component {
       },
       {
         title: '操作',
-        width: '20%',
+        width: '15%',
         // dataIndex: 'address',
         key: 'address',
         render: (category) => {
