@@ -9,7 +9,6 @@ export default class Category extends Component {
     categorys: [],
     loading: false,
     parentId: '0',
-    subCategorys: [],
     subName: '',
     confirmLoading: false,
     visible: 0, //0代表modal框不显示 1代表显示修改的modal框 2代表显示修改的
@@ -32,9 +31,9 @@ export default class Category extends Component {
           return (
             <span>
               <Button type='link' onClick={this.showUpteModal.bind(null, category)}>修改</Button>
-              {this.state.parentId === '0' ?
+              {/* {this.state.parentId === '0' ?
                 <Button type='link' onClick={this.showSubCategorys.bind(null, category)}>子分类</Button>
-                : null}
+                : null} */}
               <Button type='link' onClick={() => { this.deleteCategory(category) }}>删除</Button>
             </span>
           )
@@ -62,7 +61,7 @@ export default class Category extends Component {
     // 更新parrentId和subName的值
     this.setState({ parentId: category._id, subName: category.name }, () => {
       //再发送ajax请求 获取子分类列表
-      this.getCategorys()
+      this.getCategorys(null, category)
       // console.log(this.state.parentId);
     })
   }
@@ -75,7 +74,7 @@ export default class Category extends Component {
     })
   }
   // 获取一级二级分类列表
-  getCategorys = async (parentId) => {
+  getCategorys = async (parentId, record = {}) => {
     parentId = parentId || this.state.parentId
     //获取一级分类
     this.setState({ loading: true })
@@ -86,7 +85,13 @@ export default class Category extends Component {
       if (parentId === '0') {
         this.setState({ categorys: result.data })
       } else {
-        this.setState({ subCategorys: result.data })
+        let { categorys } = this.state
+        categorys.forEach((v,i) => {
+          if (v._id === record._id) {
+            categorys[i].subCategorys = result.data
+            this.setState({categorys: [...categorys]})
+          }
+        })
       }
     } else {
       message.error('获取分类列表失败！')
@@ -127,7 +132,11 @@ export default class Category extends Component {
           // 清除输入数据
           this.form.resetFields()
           // 修改成功 重新刷新列表
-          this.getCategorys()
+          if (categoryId !== '0') {
+            this.getCategorys(null, this.expandRecord)
+          } else {
+            this.getCategorys()
+          }
         }
 
       }
@@ -148,7 +157,6 @@ export default class Category extends Component {
           this.setState({ visible: 0 })
           // 清除输入数据
           this.form.resetFields()
-          console.log(parentId, this.state.parentId);
           if (parentId === this.state.parentId) {
             // 如果是当前页就刷新当前列表页
             this.getCategorys()
@@ -168,33 +176,61 @@ export default class Category extends Component {
     // 初始化字段数组
     this.initColumns()
   }
+  expandedRowRender = (record) => {
+    const columns = [
+      {
+        title: '子分类名称',
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: '操作',
+        width: '15%',
+        // dataIndex: 'address',
+        key: 'address',
+        render: (category) => {
+          return (
+            <span>
+              <Button type='link' onClick={this.showUpteModal.bind(null, category)}>修改</Button>
+              {/* {this.state.parentId === '0' ?
+                <Button type='link' onClick={this.showSubCategorys.bind(null, category)}>子分类</Button>
+                : null} */}
+              <Button type='link' onClick={() => { this.deleteCategory(category) }}>删除</Button>
+            </span>
+          )
+        }
+      },
+    ];
+    return <Table
+    columns={columns}
+    dataSource={record.subCategorys ? record.subCategorys : []}
+    pagination={false} />
+  }
+  handleExpand = (expand, record) => {
+    this.expandRecord = record
+    this.showSubCategorys(record)
+
+  }
   render() {
-    let { loading, categorys, parentId, subCategorys, subName, confirmLoading } = this.state
+    let { loading, categorys, parentId, confirmLoading } = this.state
     const category = this.category || {}
-    let title = parentId === '0' ? '商品分类' : (
-      <span>
-        <Button type='link' style={{ paddingRight: 0 }}
-          onClick={
-            this.showCategorys
-          }
-        >商品分类</Button>
-        <Icon type='right' style={{ margin: '0px 5px' }}></Icon>
-        {subName}
-      </span>
-    )
     return (
-      <Card title={title} extra={<Button type="primary"
-        onClick={this.showAddModal}
-      >
-        <Icon type='plus'></Icon>
-            添加</Button>}>
+      <Card>
+        <div style={{ marginBottom: 14 }}>
+          <Button type="primary"
+            onClick={this.showAddModal}
+          >
+            <Icon type='plus'></Icon>
+            添加</Button>
+        </div>
         <Table
-          dataSource={parentId === '0' ? categorys : subCategorys}
+          dataSource={categorys}
           columns={this.columns}
-          bordered
           loading={loading}
+          onExpand={this.handleExpand}
+          expandedRowRender={this.expandedRowRender}
           pagination={{ defaultPageSize: PAGE_SIZE, showQuickJumper: true }}
-        />;
+        />
         <Modal
           title="修改分类"
           visible={this.state.visible === 1 ? true : false}

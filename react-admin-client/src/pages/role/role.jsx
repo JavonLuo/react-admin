@@ -113,7 +113,7 @@ export default class Role extends Component {
     render() {
         const {role,roles,loading} = this.state
         const title = (
-            <span>
+            <span style={{marginBottom: 14, display: 'inline-block'}}>
                 <Button 
                 type='primary'
                 onClick={()=>{this.setState({visible:2})}}
@@ -127,9 +127,9 @@ export default class Role extends Component {
             </span>
         )
         return (
-            <Card title={title}>
+            <Card>
+            {title}
                 <Table 
-                bordered
                 rowKey='_id'
                 dataSource={roles} 
                 columns={this.columns}

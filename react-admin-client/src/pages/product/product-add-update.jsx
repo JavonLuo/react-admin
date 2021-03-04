@@ -153,12 +153,21 @@ class ProductAddUpdate extends Component {
         }
         // Card标题
         const title = (
-            <span style={{ fontSize: 20 }}>
+            <span
+                style={{
+                    display: 'flex',
+                    // justifyContent: 'center',
+                    alignItems: 'center',
+                    fontSize: '16px',
+                    cursor: 'pointer',
+                }}
+                onClick={() => {
+                    this.props.history.go(-1)
+                }}
+            >
                 <Button type='link'
                     style={{ fontSize: 20 }}
-                    onClick={() => {
-                        this.props.history.go(-1)
-                    }}
+
                 >
                     <Icon type="left-circle" />
                 </Button>

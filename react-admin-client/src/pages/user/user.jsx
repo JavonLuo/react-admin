@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import {
   Card,
   Button,
@@ -6,10 +6,10 @@ import {
   Modal,
   message
 } from 'antd'
-import {formateDate} from "../../utils/dateUtils"
-import {reqDeleteUser, reqUsers, reqAddOrUpdateUser} from "../../api"
+import { formateDate } from "../../utils/dateUtils"
+import { reqDeleteUser, reqUsers, reqAddOrUpdateUser } from "../../api"
 import UserForm from './user-form'
-import {PAGE_SIZE} from '../../utils/constants'
+import { PAGE_SIZE } from '../../utils/constants'
 
 /*
 用户路由
@@ -20,7 +20,7 @@ export default class User extends Component {
     users: [], // 所有用户列表
     roles: [], // 所有角色列表
     isShow: false, // 是否显示确认框
-    loading:false
+    loading: false
   }
   initColumns = () => {
     this.columns = [
@@ -40,7 +40,7 @@ export default class User extends Component {
       {
         title: '注册时间',
         dataIndex: 'create_time',
-        render: (create_time)=>formateDate(create_time,true)
+        render: (create_time) => formateDate(create_time, true)
       },
       {
         title: '所属角色',
@@ -67,12 +67,12 @@ export default class User extends Component {
     // 保存
     this.roleNames = roleNames
   }
- // 显示添加界面
+  // 显示添加界面
   showAdd = () => {
     this.user = null // 去除前面保存的user
-    this.setState({isShow: true})
+    this.setState({ isShow: true })
   }
- // 显示修改界面
+  // 显示修改界面
   showUpdate = (user) => {
     this.user = user // 保存user
     this.setState({
@@ -85,7 +85,7 @@ export default class User extends Component {
       title: `确认删除${user.username}吗?`,
       onOk: async () => {
         const result = await reqDeleteUser(user._id)
-        if(result.status===0) {
+        if (result.status === 0) {
           message.success('删除用户成功!')
           this.getUsers()
         }
@@ -94,7 +94,7 @@ export default class User extends Component {
   }
   // 添加/更新用户
   addOrUpdateUser = async () => {
-    this.setState({isShow: false})
+    this.setState({ isShow: false })
     // 1. 收集输入数据
     const user = this.form.getFieldsValue()
     this.form.resetFields()
@@ -105,17 +105,17 @@ export default class User extends Component {
     // 2. 提交添加的请求
     const result = await reqAddOrUpdateUser(user)
     // 3. 更新列表显示
-    if(result.status===0) {
+    if (result.status === 0) {
       message.success(`${this.user ? '修改' : '添加'}用户成功`)
       this.getUsers()
     }
   }
   getUsers = async () => {
-    this.setState({loading:true})
+    this.setState({ loading: true })
     const result = await reqUsers()
-    this.setState({loading:false})
-    if (result.status===0) {
-      const {users, roles} = result.data
+    this.setState({ loading: false })
+    if (result.status === 0) {
+      const { users, roles } = result.data
       this.initRoleNames(roles)
       this.setState({
         users,
@@ -123,24 +123,25 @@ export default class User extends Component {
       })
     }
   }
-  componentWillMount () {
+  componentWillMount() {
     this.initColumns()
   }
-  componentDidMount () {
+  componentDidMount() {
     this.getUsers()
   }
   render() {
-    const {users, roles, isShow,loading} = this.state
+    const { users, roles, isShow, loading } = this.state
     const user = this.user || {}
-    const title = <Button type='primary' onClick={this.showAdd}>创建用户</Button>
     return (
-      <Card title={title}>
+      <Card>
+        <div style={{marginBottom: 14}}>
+          <Button type='primary' onClick={this.showAdd}>创建用户</Button>
+        </div>
         <Table
-          bordered
           rowKey='_id'
           dataSource={users}
           columns={this.columns}
-          pagination={{defaultPageSize: PAGE_SIZE}}
+          pagination={{ defaultPageSize: PAGE_SIZE }}
           loading={loading}
         />
         <Modal
@@ -149,7 +150,7 @@ export default class User extends Component {
           onOk={this.addOrUpdateUser}
           onCancel={() => {
             this.form.resetFields()
-            this.setState({isShow: false})
+            this.setState({ isShow: false })
           }}
         >
           <UserForm

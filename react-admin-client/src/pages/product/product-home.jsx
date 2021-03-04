@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, Select, Input, Button, Icon, Table, message, Popconfirm } from 'antd'
+import { Card, Select, Input, Button, Icon, Table, message, Popconfirm, Tag } from 'antd'
 import { reqProducts, reqSearchProducts, reqProductStatus, reqDelProduct } from '../../api'
 import { PAGE_SIZE } from '../../utils/constants'
 const { Option } = Select
@@ -32,27 +32,22 @@ export default class ProductHome extends Component {
             {
                 title: '状态',
                 width: '15%',
-                render: (product) => {
-                    const { _id, status } = product
+                render: ({ _id, status }) => {
                     //   status == 1代表未上架 ==2 代表已上架
                     return (
-                        <span style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
-                            <Button
-                                type='primary'
-                                onClick={this.updateStatus.bind(null, _id, status === 1 ? 2 : 1)}
-                            >
-                                {status === 1 ? '上架' : '下架'}
-                            </Button>
-                            <span style={{ margin: '10px 0px', width: 60, display: 'inline-block', textAlign: 'center' }}>
-                                {status === 1 ? '未上架' : '在售'}
-                            </span>
-                        </span>)
+                        <>
+                            {
+                                status === 1 ?
+                                    <Tag color="#108ee9">未上架</Tag> : <Tag color="#87d068">在售</Tag>
+                            }
+                        </>)
                 }
             },
             {
                 title: '操作',
                 width: '15%',
                 render: (product) => {
+                    const { _id, status } = product
                     return (
                         <span>
                             <Button type='link'
@@ -63,13 +58,19 @@ export default class ProductHome extends Component {
                             <Button type='link'
                                 onClick={() => this.props.history.push('/product/addupdate', product)}
                             >修改</Button>
+                            <Button
+                                type='link'
+                                onClick={this.updateStatus.bind(null, _id, status === 1 ? 2 : 1)}
+                            >
+                                {status === 1 ? '上架' : '下架'}
+                            </Button>
                             <Popconfirm
-                            okText='确定'
-                            cancelText='取消'
-                            title="确定删除该商品吗?"
-                            onConfirm={() => this.delProduct(product._id)}>
-                            <Button type='link'
-                            >删除</Button>
+                                okText='确定'
+                                cancelText='取消'
+                                title="确定删除该商品吗?"
+                                onConfirm={() => this.delProduct(product._id)}>
+                                <Button type='link'
+                                >删除</Button>
                             </Popconfirm>
                         </span>
                     )
@@ -127,35 +128,31 @@ export default class ProductHome extends Component {
     }
     render() {
         let { products, total, searchType, loading } = this.state
-        const title = (
-            <span>
-                <Select value={searchType}
-                    onChange={value => this.setState({ searchType: value })}
-                    style={{ width: 150 }}>
-                    <Option value='productName'>按名称搜索</Option>
-                    <Option value='productDesc'>按描述搜索</Option>
-                </Select>
-                <Input placeholder='关键字'
-                    onChange={e => this.setState({ searchName: e.target.value })}
-                    style={{ width: 200, margin: '0 15px' }}></Input>
-                <Button
-                    type='primary'
-                    onClick={this.getProducts.bind(null, 1)}
-                >搜索</Button>
-            </span>
-        )
-        const extra = (
-            <Button type='primary'
-                onClick={() => { this.props.history.push('/product/addupdate') }}
-            >
-                <Icon type='plus'></Icon>
+        return (
+            <Card>
+                <div style={{ marginBottom: 14 }}>
+                    <Select value={searchType}
+                        onChange={value => this.setState({ searchType: value })}
+                        style={{ width: 150 }}>
+                        <Option value='productName'>按名称搜索</Option>
+                        <Option value='productDesc'>按描述搜索</Option>
+                    </Select>
+                    <Input placeholder='关键字'
+                        onChange={e => this.setState({ searchName: e.target.value })}
+                        style={{ width: 200, margin: '0 15px' }}></Input>
+                    <Button
+                        type='primary'
+                        style={{ marginRight: 15 }}
+                        onClick={this.getProducts.bind(null, 1)}
+                    >搜索</Button>
+                    <Button type='primary'
+                        onClick={() => { this.props.history.push('/product/addupdate') }}
+                    >
+                        <Icon type='plus'></Icon>
                 添加商品
             </Button>
-        )
-        return (
-            <Card title={title} extra={extra}>
+                </div>
                 <Table
-                    bordered
                     dataSource={products}
                     loading={loading}
                     pagination={{

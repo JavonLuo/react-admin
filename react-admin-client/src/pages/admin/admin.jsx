@@ -17,7 +17,7 @@ import Order from '../order/order'
 
 
 import { Layout } from 'antd';
-const { Footer, Sider, Content } = Layout;
+const { Footer, Content } = Layout;
 export default class admin extends Component {
     render() {
         if(!memoryUtils.user._id){
@@ -25,9 +25,7 @@ export default class admin extends Component {
         }
         return (
         <Layout style={{minHeight:'100%'}}>
-        <Sider>
         <LeftNav></LeftNav>
-        </Sider>
         <Layout>
             <Header>Header</Header>
             <Content style={{backgroundColor:'white',margin:20}}>
