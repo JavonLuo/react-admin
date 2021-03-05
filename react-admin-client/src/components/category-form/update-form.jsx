@@ -15,8 +15,8 @@ class AddForm extends Component {
         const { getFieldDecorator } = this.props.form
         return (
             <Form>
-                <Form.Item>
-                <p style={{marginBottom:0}}>请输入修改的分类名称：</p>
+                <Form.Item label={'请输入修改的分类名称'}>
+                {/* <p style={{marginBottom:0}}>请输入修改的分类名称：</p> */}
                 {getFieldDecorator('categoryName', {
                    initialValue: categoryName,
                    rules: [{ required: true,whitespace:true,message: '分类名称必须输入!' },]

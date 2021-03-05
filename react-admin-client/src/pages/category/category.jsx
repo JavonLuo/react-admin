@@ -4,12 +4,14 @@ import { reqCategory, reqUpdateCategory, reqAddCategory, reqDelCategory } from '
 import AddForm from '../../components/category-form/add-form'
 import UpdateForm from '../../components/category-form/update-form'
 import { PAGE_SIZE } from '../../utils/constants'
+import CategoryTree from './CategoryTree'
+import SplitPane from 'react-split-pane'
 export default class Category extends Component {
   state = {
     categorys: [],
+    addComponentCategorys: [],
     loading: false,
-    parentId: '0',
-    subName: '',
+    isUpdate: false,
     confirmLoading: false,
     visible: 0, //0代表modal框不显示 1代表显示修改的modal框 2代表显示修改的
 
@@ -48,51 +50,20 @@ export default class Category extends Component {
       // 更新parrentId和subName的值
       this.setState({ parentId: category.parentId }, () => {
         //再发送ajax请求 获取子分类列表
-        this.getCategorys()
+        // this.getCategorys()
+        this.setState({ isUpdate: Math.random() })
         // console.log(this.state.parentId);
       })
     } else {
       message.error(res.msg)
     }
   }
-  // 显示二级分类列表
-  showSubCategorys = (category) => {
-    // console.log(category);
-    // 更新parrentId和subName的值
-    this.setState({ parentId: category._id, subName: category.name }, () => {
-      //再发送ajax请求 获取子分类列表
-      this.getCategorys(null, category)
-      // console.log(this.state.parentId);
-    })
-  }
-  // 显示一级分类列表
-  showCategorys = () => {
-    this.setState({
-      parentId: '0',
-      subCategorys: [],
-      subName: ''
-    })
-  }
   // 获取一级二级分类列表
-  getCategorys = async (parentId, record = {}) => {
-    parentId = parentId || this.state.parentId
+  getCategorys = async () => {
     //获取一级分类
-    this.setState({ loading: true })
-    const result = await reqCategory(parentId)
-    this.setState({ loading: false })
+    const result = await reqCategory('0')
     if (result.status === 0) {
-      // 如果prentId===0表示更新一级分类列表 否则更新二级分类列表
-      if (parentId === '0') {
-        this.setState({ categorys: result.data })
-      } else {
-        let { categorys } = this.state
-        categorys.forEach((v,i) => {
-          if (v._id === record._id) {
-            categorys[i].subCategorys = result.data
-            this.setState({categorys: [...categorys]})
-          }
-        })
-      }
+      this.setState({ addComponentCategorys: result.data })
     } else {
       message.error('获取分类列表失败！')
     }
@@ -128,15 +99,9 @@ export default class Category extends Component {
         if (result.status === 0) {
           this.setState({ confirmLoading: false })
           // 隐藏掉弹框
-          this.setState({ visible: 0 })
+          this.setState({ visible: 0, isUpdate: Math.random()*100 })
           // 清除输入数据
           this.form.resetFields()
-          // 修改成功 重新刷新列表
-          if (categoryId !== '0') {
-            this.getCategorys(null, this.expandRecord)
-          } else {
-            this.getCategorys()
-          }
         }
 
       }
@@ -154,67 +119,36 @@ export default class Category extends Component {
         if (result.status === 0) {
           this.setState({ confirmLoading: false })
           // 隐藏掉弹框
-          this.setState({ visible: 0 })
+          this.setState({ visible: 0, isUpdate: Math.random()*100 })
           // 清除输入数据
           this.form.resetFields()
-          if (parentId === this.state.parentId) {
-            // 如果是当前页就刷新当前列表页
-            this.getCategorys()
-            // 如果当前页是在二级列表页添加一级列表页 那就刷新一级列表页
-          } else if (parentId === '0') {
-            this.getCategorys('0')
-          }
         }
       }
     })
   }
+  getTableData = (tableData, loading) => {
+    if (!tableData) {
+      this.setState({loading: loading})
+    } else {
+      this.setState({categorys: tableData, loading: loading})
+    }
+  }
+  resetIsUpdate = () => {
+    this.setState({isUpdate: false})
+  }
   componentDidMount() {
-    // 异步请求数据
     this.getCategorys()
   }
   componentWillMount() {
     // 初始化字段数组
     this.initColumns()
   }
-  expandedRowRender = (record) => {
-    const columns = [
-      {
-        title: '子分类名称',
-        dataIndex: 'name',
-        key: 'name',
-      },
-      {
-        title: '操作',
-        width: '15%',
-        // dataIndex: 'address',
-        key: 'address',
-        render: (category) => {
-          return (
-            <span>
-              <Button type='link' onClick={this.showUpteModal.bind(null, category)}>修改</Button>
-              {/* {this.state.parentId === '0' ?
-                <Button type='link' onClick={this.showSubCategorys.bind(null, category)}>子分类</Button>
-                : null} */}
-              <Button type='link' onClick={() => { this.deleteCategory(category) }}>删除</Button>
-            </span>
-          )
-        }
-      },
-    ];
-    return <Table
-    columns={columns}
-    dataSource={record.subCategorys ? record.subCategorys : []}
-    pagination={false} />
-  }
-  handleExpand = (expand, record) => {
-    this.expandRecord = record
-    this.showSubCategorys(record)
-
-  }
   render() {
-    let { loading, categorys, parentId, confirmLoading } = this.state
+    let { loading, categorys, confirmLoading, isUpdate, addComponentCategorys } = this.state
     const category = this.category || {}
     return (
+      <SplitPane split="vertical" minSize={230} maxSize={300} style={{position: 'unset'}}>
+      <CategoryTree getTableData={this.getTableData} isUpdate={isUpdate ? this.resetIsUpdate : null} />
       <Card>
         <div style={{ marginBottom: 14 }}>
           <Button type="primary"
@@ -227,8 +161,7 @@ export default class Category extends Component {
           dataSource={categorys}
           columns={this.columns}
           loading={loading}
-          onExpand={this.handleExpand}
-          expandedRowRender={this.expandedRowRender}
+          rowKey='_id'
           pagination={{ defaultPageSize: PAGE_SIZE, showQuickJumper: true }}
         />
         <Modal
@@ -250,13 +183,12 @@ export default class Category extends Component {
           onCancel={this.handleCancel}
         >
           <AddForm
-            categorys={categorys}
-            parentId={parentId}
+            categorys={addComponentCategorys}
             setForm={(form) => { this.form = form }}
           />
         </Modal>
       </Card>
-
+      </SplitPane>
     )
   }
 }

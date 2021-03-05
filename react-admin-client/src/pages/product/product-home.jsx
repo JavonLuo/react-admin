@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, Select, Input, Button, Icon, Table, message, Popconfirm, Tag } from 'antd'
+import { Card, Select, Input, Button, Icon, Table, message, Popconfirm, Badge } from 'antd'
 import { reqProducts, reqSearchProducts, reqProductStatus, reqDelProduct } from '../../api'
 import { PAGE_SIZE } from '../../utils/constants'
 const { Option } = Select
@@ -38,7 +38,8 @@ export default class ProductHome extends Component {
                         <>
                             {
                                 status === 1 ?
-                                    <Tag color="#108ee9">未上架</Tag> : <Tag color="#87d068">在售</Tag>
+                                    <Badge status="default" text='未上架'></Badge >
+                                     : <Badge status="processing" text='在售'></Badge >
                             }
                         </>)
                 }

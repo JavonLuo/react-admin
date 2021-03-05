@@ -5,7 +5,7 @@ import ajax from './ajax'
 export const reqLogin = (username, password) => ajax('/admin/login', { username, password }, 'POST')
 
 // 获取分类列表
-export const reqCategory = (parentId) => ajax('/admin/manage/category/list', { parentId })
+export const reqCategory = (parentId, _id) => ajax('/admin/manage/category/list', { parentId, _id })
 // 添加分类
 export const reqAddCategory = (parentId, categoryName) => ajax('/admin/manage/category/add', { parentId, categoryName }, 'POST')
 // 删除分类
