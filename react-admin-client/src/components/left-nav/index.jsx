@@ -3,7 +3,7 @@ import logo from '../../assets/images/logo.png'
 import style from './index.module.less'
 import { Link, withRouter } from 'react-router-dom'
 import menulist from '../../config/menuConfig'
-import { Menu, Icon, Layout } from 'antd'
+import { Menu, Icon, Layout, Tooltip } from 'antd'
 import memoryUtils from '../../utils/memoryUtils'
 const { SubMenu } = Menu;
 const { Sider } = Layout;
@@ -89,11 +89,22 @@ class LeftNav extends Component {
         <div>
           <Link to='/' className={style.leftNav}>
             <header style={this.state.collapsed ? { justifyContent: 'center' } : null}>
-              <img
-                title={'React 后台'}
-                src={logo}
-                style={!this.state.collapsed ? { margin: '0px 10px' } : null}
-                alt="" />
+              {
+
+                this.state.collapsed ?
+                  <Tooltip placement="right" title={'React 后台'}>
+                    <img
+                      src={logo}
+                      // style={!this.state.collapsed ? { margin: '0px 10px' } : null}
+                      alt="" />
+                  </Tooltip>
+                  :
+                  <img
+                    title={'React 后台'}
+                    src={logo}
+                    style={!this.state.collapsed ? { margin: '0px 10px' } : null}
+                    alt="" />
+              }
               {!this.state.collapsed ?
                 <h1>React 后台</h1> : null
               }
