@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import { Button, Modal } from 'antd';
+import { Button, Modal, Card, Breadcrumb } from 'antd';
 import { withRouter } from 'react-router-dom'
-import menuList from '../../config/menuConfig'
+// import menuList from '../../config/menuConfig'
 import style from './index.module.less'
 import memoryUtils from '../../utils/memoryUtils'
 import { formateDate } from '../../utils/dateUtils'
 import storageUtils from '../../utils/storageUtils'
+import store from 'store'
 const { confirm } = Modal;
-
 
 class Header extends Component {
     state = {
@@ -22,20 +22,22 @@ class Header extends Component {
     }
     //动态显示标题
     getTitle = () => {
+        const menus = store.get('menus') || []
         let path = this.props.location.pathname
-        let title
-        menuList.forEach((item) => {
+        let oneTitle
+        let twoTitle
+        menus.forEach((item) => {
             if (item.key === path) {
-                title = item.title
+                oneTitle = item.title
             } else if (item.children) {
                 const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0)
                 if (cItem) {
-
-                    title = cItem.title
+                    oneTitle = item.title
+                    twoTitle = cItem.title
                 }
             }
         })
-        return title
+        return {twoTitle, oneTitle}
     }
     //退出登录
     loginOut = () => {
@@ -60,20 +62,32 @@ class Header extends Component {
     render() {
         let username = memoryUtils.user.username
         let { currentTime } = this.state
-        let title = this.getTitle()
+        let {oneTitle, twoTitle} = this.getTitle()
         return (
-            <div className={style.header}>
-                <div className={style.headerTop}>
-                    <div className={style.weatherInfo}>
-                        <span>{currentTime}</span>
+            <>
+                <div className={style.header}>
+                    <div className={style.headerTop}>
+                        <div className={style.weatherInfo}>
+                            <span>{currentTime}</span>
+                        </div>
+                        <p>欢迎您，<span style={{ fontWeight: 500 }}>{username}</span></p>
+                        <Button type="link" onClick={this.loginOut} style={{ margin: '0px 10px' }}>退出</Button>
                     </div>
-                    <p>欢迎您，<span style={{ fontWeight: 500 }}>{username}</span></p>
-                    <Button type="link" onClick={this.loginOut} style={{ margin: '0px 10px' }}>退出</Button>
-                </div>
-                <div className={style.headerBottom}>
+                    {/* <div className={style.headerBottom}>
                     <h3>{title}</h3>
+                </div> */}
                 </div>
-            </div>
+                <Card style={{ margin: '20px 20px 0px 20px' }}>
+                    <Breadcrumb>
+                        <Breadcrumb.Item>
+                            {oneTitle}
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item>
+                            {twoTitle}
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
+                </Card>
+            </>
         )
     }
 }

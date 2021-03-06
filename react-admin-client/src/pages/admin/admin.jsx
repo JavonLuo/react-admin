@@ -29,9 +29,14 @@ export default class admin extends Component {
         this.getMenu()
     }
     getMenu = async () => {
-        const result = await reqMenu()
-        store.set('menus', result.data)
-        this.setState({ isRender: true })
+        const menus = store.get('menus') || []
+        if (menus && menus.length) {
+            this.setState({ isRender: true })
+        } else {
+            const result = await reqMenu()
+            store.set('menus', result.data)
+            this.setState({ isRender: true })
+        }
     }
     render() {
         if (!memoryUtils.user._id) {
@@ -72,7 +77,7 @@ export default class admin extends Component {
                         </Switch>
 
                     </Content>
-                    <Footer style={{ textAlign: 'center', color: '#aaa' }}>推荐使用谷歌浏览器，可以获得更佳页面操作体验</Footer>
+                    <Footer style={{ textAlign: 'center', color: '#aaa' }}>React 后台 @https://github.com/JaFengLuo/react-admin</Footer>
                 </Layout>
             </Layout>
         )
