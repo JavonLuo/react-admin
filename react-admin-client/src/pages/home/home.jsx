@@ -8,7 +8,6 @@ import {
 } from 'antd'
 import moment from 'moment'
 
-import Line from './line'
 import Bar from './bar'
 import './home.less'
 
@@ -30,6 +29,7 @@ export default class Home extends Component {
 
     return (
       <div className='home'>
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
         <Card
           className="home-card"
           title="商品总量"
@@ -38,7 +38,7 @@ export default class Home extends Component {
           headStyle={{color: 'rgba(0,0,0,.45)'}}
         >
           <Statistic
-            value={1128163}
+            value={126560}
             suffix="个"
             style={{fontWeight: 'bolder'}}
           />
@@ -46,7 +46,7 @@ export default class Home extends Component {
             value={15}
             valueStyle={{fontSize: 15}}
             prefix={'周同比'}
-            suffix={<div>%<Icon style={{color: 'red', marginLeft: 10}} type="arrow-down"/></div>}
+            suffix={<div>%<Icon style={{color: '#3f8600', marginLeft: 10}} type="arrow-up"/></div>}
           />
           <Statistic
             value={10}
@@ -55,9 +55,84 @@ export default class Home extends Component {
             suffix={<div>%<Icon style={{color: '#3f8600', marginLeft: 10}} type="arrow-up"/></div>}
           />
         </Card>
-
-        <Line/>
-
+        <Card
+          className="home-card"
+          title="访问量"
+          extra={<Icon style={{color: 'rgba(0,0,0,.45)'}} type="question-circle"/>}
+          style={{width: 250}}
+          headStyle={{color: 'rgba(0,0,0,.45)'}}
+        >
+          <Statistic
+            value={8846}
+            suffix="次"
+            style={{fontWeight: 'bolder'}}
+          />
+          <Statistic
+            value={12}
+            valueStyle={{fontSize: 15}}
+            prefix={'周同比'}
+            suffix={<div>%<Icon style={{color: 'red', marginLeft: 10}} type="arrow-down"/></div>}
+          />
+          <Statistic
+            value={18}
+            valueStyle={{fontSize: 15}}
+            prefix={'日同比'}
+            suffix={<div>%<Icon style={{color: '#3f8600', marginLeft: 10}} type="arrow-up"/></div>}
+          />
+        </Card>
+        <Card
+          className="home-card"
+          title="支付笔数"
+          extra={<Icon style={{color: 'rgba(0,0,0,.45)'}} type="question-circle"/>}
+          style={{width: 250}}
+          headStyle={{color: 'rgba(0,0,0,.45)'}}
+        >
+          <Statistic
+            value={6560}
+            suffix="笔"
+            style={{fontWeight: 'bolder'}}
+          />
+          <Statistic
+            value={6}
+            valueStyle={{fontSize: 15}}
+            prefix={'周同比'}
+            suffix={<div>%<Icon style={{color: '#3f8600', marginLeft: 10}} type="arrow-up"/></div>}
+          />
+          <Statistic
+            value={9}
+            valueStyle={{fontSize: 15}}
+            prefix={'日同比'}
+            suffix={<div>%<Icon style={{color: '#3f8600', marginLeft: 10}} type="arrow-up"/></div>}
+          />
+        </Card>
+        <Card
+          className="home-card"
+          title="活动运营效果"
+          extra={<Icon style={{color: 'rgba(0,0,0,.45)'}} type="question-circle"/>}
+          style={{width: 250}}
+          headStyle={{color: 'rgba(0,0,0,.45)'}}
+        >
+          <Statistic
+            value={'78%'}
+            suffix=""
+            style={{fontWeight: 'bolder'}}
+          />
+          <Statistic
+            value={12}
+            valueStyle={{fontSize: 15}}
+            prefix={'周同比'}
+            suffix={<div>%<Icon style={{color: 'red', marginLeft: 10}} type="arrow-down"/></div>}
+          />
+          <Statistic
+            value={11}
+            valueStyle={{fontSize: 15}}
+            prefix={'日同比'}
+            suffix={<div>%<Icon style={{color: '#3f8600', marginLeft: 10}} type="arrow-up"/></div>}
+          />
+        </Card>
+        </div>
+        {/* <Line/> */}
+        <div style={{position: 'relative'}}>
         <Card
           className="home-content"
           title={<div className="home-menu">
@@ -95,6 +170,7 @@ export default class Home extends Component {
             </Timeline>
           </Card>
         </Card>
+        </div>
       </div>
     )
   }
