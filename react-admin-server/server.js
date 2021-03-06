@@ -8,7 +8,9 @@
 const mongoose = require('mongoose')
 const express = require('express')
 const app = express() // 产生应用对象
-
+const path = require('path')
+// 设置静态资源目录
+app.use(express.static(path.resolve(__dirname, 'public')))
 // 声明使用解析post请求的中间件
 app.use(express.urlencoded({extended: true})) // 请求体参数是: name=tom&pwd=123
 app.use(express.json()) // 请求体参数是json结构: {name: tom, pwd: 123}
