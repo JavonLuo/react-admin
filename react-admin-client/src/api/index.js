@@ -34,8 +34,12 @@ export const reqAddOrUpdateProduct = (product) => ajax('/admin/manage/product/' 
 export const reqRoles = () => ajax('/admin/manage/role/list')
 // 添加角色
 export const reqAddRole = (roleName) => ajax('/admin/manage/role/add', { roleName }, "POST")
+// 更新角色
+export const reqUpdateRole = (role, roleName) => ajax('/admin/manage/role/update', { role, roleName }, "POST")
+// 删除角色
+export const reqDeleteRole = (_id) => ajax('/admin/manage/role/delete', { _id }, "POST")
 // 更新角色信息
-export const reqUpdate = (role) => ajax('/admin/manage/role/update', role, 'POST')
+export const reqUpdate = (role) => ajax('/admin/manage/auth/update', role, 'POST')
 // 获取所有用户信息 
 export const reqUsers = () => ajax('/admin/manage/user/list')
 // 创建/修改用户

@@ -6,7 +6,7 @@ const menuList = [
     isPublic: true, // 公开的
   },
   {
-    title: '商品',
+    title: '商品管理',
     key: '/products',
     icon: 'appstore',
     children: [ // 子菜单列表
@@ -16,24 +16,34 @@ const menuList = [
         icon: 'bars'
       },
       {
-        title: '商品管理',
+        title: '商品信息',
         key: '/product',
         icon: 'tool'
       },
     ]
   },
-
+  {
+    title: '权限管理',
+    key: '/roles',
+    icon: 'team',
+    children: [ // 子菜单列表
+      {
+        title: '角色管理',
+        key: '/role',
+        icon: 'safety',
+      },
+      {
+        title: '角色授权',
+        key: '/auth',
+        icon: 'apartment'
+      },
+    ]
+  },
   {
     title: '用户管理',
     key: '/user',
     icon: 'user'
   },
-  {
-    title: '角色管理',
-    key: '/role',
-    icon: 'safety',
-  },
-
   {
     title: '图形图表',
     key: '/charts',

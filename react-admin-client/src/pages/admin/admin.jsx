@@ -8,6 +8,7 @@ import Home from '../home/home'
 import Product from '../product/product'
 import Category from '../category/category'
 import Role from '../role/role'
+import Auth from '../role/auth'
 import User from '../user/user'
 import Pie from '../charts/pie'
 import Line from '../charts/line'
@@ -34,6 +35,7 @@ export default class admin extends Component {
             <Route path='/category' component={Category}></Route>
             <Route path='/product' component={Product}></Route>
             <Route path='/role' component={Role}></Route>
+            <Route path='/auth' component={Auth}></Route>
             <Route path='/charts/pie' component={Pie}></Route>
             <Route path='/charts/line' component={Line}></Route>
             <Route path='/charts/bar' component={Bar}></Route>

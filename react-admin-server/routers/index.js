@@ -339,7 +339,29 @@ router.post('/manage/role/add', (req, res) => {
       res.send({ status: 1, msg: '添加角色异常, 请重新尝试' })
     })
 })
-
+// 更新角色
+router.post('/manage/role/update', (req, res) => {
+  const { role, roleName } = req.body
+  RoleModel.findOneAndUpdate({ _id: role._id }, { name: roleName })
+    .then(oldRole => {
+      res.send({ status: 0 })
+    })
+    .catch(error => {
+      console.error('更新角色异常', error)
+      res.send({ status: 1, msg: '更新角色信息异常, 请重新尝试' })
+    })
+})
+// 删除角色
+router.post('/manage/role/delete', (req, res) => {
+  const { _id } = req.body
+  RoleModel.deleteOne({ _id })
+    .then((doc) => {
+      res.send({ status: 0, msg: '删除成功！' })
+    })
+    .catch((err) => {
+      res.send({ status: 1, msg: '删除失败, 请重新尝试' })
+    })
+})
 // 获取角色列表
 router.get('/manage/role/list', (req, res) => {
   RoleModel.find()
@@ -353,7 +375,7 @@ router.get('/manage/role/list', (req, res) => {
 })
 
 // 更新角色(设置权限)
-router.post('/manage/role/update', (req, res) => {
+router.post('/manage/auth/update', (req, res) => {
   const role = req.body
   role.auth_time = Date.now()
   RoleModel.findOneAndUpdate({ _id: role._id }, role)
