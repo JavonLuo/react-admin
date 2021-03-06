@@ -29,14 +29,9 @@ export default class admin extends Component {
         this.getMenu()
     }
     getMenu = async () => {
-        const menus = store.get('menus') || []
-        if (menus && menus.length) {
-            this.setState({ isRender: true })
-        } else {
-            const result = await reqMenu()
-            store.set('menus', result.data)
-            this.setState({ isRender: true })
-        }
+        const result = await reqMenu()
+        store.set('menus', result.data)
+        this.setState({ isRender: true })
     }
     render() {
         if (!memoryUtils.user._id) {
