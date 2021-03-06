@@ -8,7 +8,8 @@ const UserModel = require('../models/UserModel')
 const CategoryModel = require('../models/CategoryModel')
 const ProductModel = require('../models/ProductModel')
 const RoleModel = require('../models/RoleModel')
-
+const MenuModel = require('../models/MenuModal')
+const defaultMenus = require('../defaultMenus/index')
 
 // 得到路由器对象
 const router = express.Router()
@@ -49,7 +50,101 @@ router.post('/login', (req, res) => {
       res.send({ status: 1, msg: '登陆异常, 请重新尝试' })
     })
 })
-
+// 菜单数据
+router.get('/manage/menu/list', (req, res) => {
+  MenuModel.find(req.query)
+    .then(menus => {
+      // 如果菜单不存在 就创建一个
+      if (menus && !menus.length) {
+        return MenuModel.create(defaultMenus)
+      } else { // 
+        // req.query._id存在 说明是查子分类
+        if (req.query._id) {
+        res.send({ status: 0, data: menus[0].children })
+        } else {
+        res.send({ status: 0, data: menus })
+        }
+        return new Promise(() => {
+        })
+      }
+    })
+    .then(menus => {
+      res.send({ status: 0, data: menus })
+    })
+    .catch(error => {
+      console.error('获取菜单数据异常', error)
+      res.send({ status: 1, msg: '添加菜单数据异常, 请重新尝试！' })
+    })
+})
+// 修改菜单
+router.post('/manage/menu/update', (req, res) => {
+  MenuModel.findOneAndUpdate({_id: req.body._id}, req.body.menu)
+    .then(menus => {
+      res.send({ status: 0 })
+    })
+    .catch(error => {
+      console.error('修改失败', error)
+      res.send({ status: 1, msg: '修改失败, 请重新尝试！' })
+    })
+})
+// 新增菜单
+router.post('/manage/menu/add', (req, res) => {
+  if (req.body._id) {
+  MenuModel.findOne({_id: req.body._id})
+    .then(menu => {
+      menu.children.push(req.body.menu)
+      return MenuModel.findOneAndUpdate({_id: req.body._id}, menu )
+    })
+    .then(menu => {
+      res.send({ status: 0 })
+    })
+    .catch(error => {
+      console.error('修改失败', error)
+      res.send({ status: 1, msg: '修改失败, 请重新尝试！' })
+    })
+  } else {
+    MenuModel.create(req.body.menu)
+    .then(menu => {
+      res.send({ status: 0 })
+    })
+    .catch(error => {
+      console.error('添加菜单异常', error)
+      res.send({ status: 1, msg: '添加菜单异常, 请重新尝试' })
+    })
+  }
+  // MenuModel.findOneAndUpdate({_id: req.body._id}, req.body.menu)
+  //   .then(menus => {
+  //     res.send({ status: 0 })
+  //   })
+  //   .catch(error => {
+  //     console.error('修改失败', error)
+  //     res.send({ status: 1, msg: '修改失败, 请重新尝试！' })
+  //   })
+})
+// 删除菜单
+router.post('/manage/menu/delete', (req, res) => {
+  if (!req.body.key) {
+    MenuModel.deleteOne({ _id: req.body._id })
+    .then((doc) => {
+      res.send({ status: 0, msg: '删除成功！' })
+    })
+    .catch((err) => {
+      res.send({ status: 1, msg: '删除失败, 请重新尝试' })
+    })
+  } else {
+    MenuModel.findOne({_id: req.body._id})
+    .then(menu => {
+      menu.children = menu.children.filter(item => item.key !== req.body.key)
+      return MenuModel.findOneAndUpdate({_id: req.body._id}, menu )
+    })
+    .then(menu => {
+      res.send({ status: 0, msg: '删除成功！' })
+    })
+    .catch(err => {
+      res.send({ status: 1, msg: '删除失败, 请重新尝试' })
+    })
+  }
+})
 // 添加用户
 router.post('/manage/user/add', (req, res) => {
   // 读取请求参数数据

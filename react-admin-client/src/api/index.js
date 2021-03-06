@@ -3,7 +3,14 @@ import ajax from './ajax'
 
 // 登录
 export const reqLogin = (username, password) => ajax('/admin/login', { username, password }, 'POST')
-
+// 获取菜单数据
+export const reqMenu = (_id) => ajax('/admin/manage/menu/list', { _id })
+// 修改菜单数据
+export const reqUpdateMenu = (menu, _id) => ajax('/admin/manage/menu/update', { menu, _id }, 'POST')
+// 修改菜单数据
+export const reqDeleteMenu = (_id, key) => ajax('/admin/manage/menu/delete', { _id, key }, 'POST')
+// 新增菜单数据
+export const reqAddMenu = (menu, _id) => ajax('/admin/manage/menu/add', { menu, _id }, 'POST')
 // 获取分类列表
 export const reqCategory = (parentId, _id) => ajax('/admin/manage/category/list', { parentId, _id })
 // 添加分类

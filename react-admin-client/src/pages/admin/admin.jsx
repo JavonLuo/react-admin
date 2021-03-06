@@ -14,6 +14,7 @@ import Pie from '../charts/pie'
 import Line from '../charts/line'
 import Bar from '../charts/bar'
 import Order from '../order/order'
+import Menu from '../menu/menu'
 
 
 
@@ -40,6 +41,7 @@ export default class admin extends Component {
             <Route path='/charts/line' component={Line}></Route>
             <Route path='/charts/bar' component={Bar}></Route>
             <Route path='/user' component={User}></Route>
+            <Route path='/menu' component={Menu}></Route>
             <Route path='/order' component={Order}></Route>
             <Redirect to='/home'></Redirect>
             </Switch>
