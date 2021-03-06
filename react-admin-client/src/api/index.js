@@ -6,7 +6,7 @@ export const reqLogin = (username, password) => ajax('/admin/login', { username,
 // 获取菜单数据
 export const reqMenu = (_id) => ajax('/admin/manage/menu/list', { _id })
 // 修改菜单数据
-export const reqUpdateMenu = (menu, _id) => ajax('/admin/manage/menu/update', { menu, _id }, 'POST')
+export const reqUpdateMenu = (menu, _id, treeSelected) => ajax('/admin/manage/menu/update', { menu, _id, treeSelected }, 'POST')
 // 修改菜单数据
 export const reqDeleteMenu = (_id, key) => ajax('/admin/manage/menu/delete', { _id, key }, 'POST')
 // 新增菜单数据

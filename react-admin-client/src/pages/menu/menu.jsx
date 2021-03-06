@@ -113,7 +113,7 @@ export default class Menu extends Component {
         // 准备发送的数据
         values.key = values.url
         this.setState({ confirmLoading: true })
-        const result = await reqUpdateMenu(values, this.state.menu._id)
+        const result = await reqUpdateMenu(values, this.state.menu._id, this.state._id)
         if (result.status === 0) {
           message.success('修改成功！')
           this.setState({ confirmLoading: false })
@@ -167,7 +167,7 @@ export default class Menu extends Component {
           <Modal
             title={this.state.visible === 1 ? "修改菜单" : "新增菜单"}
             visible={this.state.visible !== 0}
-            onOk={this.state.visible === 1 ?  this.updateCategory : this.addMenu}
+            onOk={this.state.visible === 1 ?  this.updateMenu : this.addMenu}
             confirmLoading={confirmLoading}
             onCancel={this.handleCancel}
           >

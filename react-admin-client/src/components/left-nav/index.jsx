@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import logo from '../../assets/images/logo.png'
 import style from './index.module.less'
 import { Link, withRouter } from 'react-router-dom'
-import menulist from '../../config/menuConfig'
+// import menulist from '../../config/menuConfig'
 import { Menu, Icon, Layout, Tooltip } from 'antd'
 import memoryUtils from '../../utils/memoryUtils'
+import store from 'store'
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 
@@ -12,14 +13,15 @@ const { Sider } = Layout;
 class LeftNav extends Component {
   state = {
     collapsed: false,
+    isRender: false,
   };
-
   onCollapse = collapsed => {
     this.setState({ collapsed });
   };
   // render函数之前先调用gitMenuNodes函数
   componentWillMount() {
-    this.menuNodes = this.getMenuNodes(menulist)
+    const menus = store.get('menus') || []
+    this.menuNodes = this.getMenuNodes(menus)
   }
   // 判断用户权限
   hasAuth = (item) => {
@@ -43,7 +45,7 @@ class LeftNav extends Component {
     let path = this.props.location.pathname
     return menulist.map((item) => {
       if (this.hasAuth(item)) {
-        if (item.children) {
+        if (item.children && item.children.length) {
           // 如果有子级菜单 那么通过数组find方法判断子菜单的key有没有跟路由匹配的路径相等
           const openkey = item.children.find(item => path.indexOf(item.key) === 0)
           // 如果有值 说明当前路由匹配子菜单的某一项 保存到组件对象this中

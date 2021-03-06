@@ -7,6 +7,12 @@ const defaultMenus = [
     isPublic: true, // 公开的
   },
   {
+    title: '菜单管理', // 菜单标题名称
+    key: '/menu', // 对应的path
+    url: '/menu',
+    icon: 'menu', // 图标名称
+  },
+  {
     title: '商品管理',
     key: '/products',
     url: '/products',

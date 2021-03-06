@@ -76,21 +76,10 @@ router.get('/manage/menu/list', (req, res) => {
       res.send({ status: 1, msg: '添加菜单数据异常, 请重新尝试！' })
     })
 })
-// 修改菜单
-router.post('/manage/menu/update', (req, res) => {
-  MenuModel.findOneAndUpdate({_id: req.body._id}, req.body.menu)
-    .then(menus => {
-      res.send({ status: 0 })
-    })
-    .catch(error => {
-      console.error('修改失败', error)
-      res.send({ status: 1, msg: '修改失败, 请重新尝试！' })
-    })
-})
 // 新增菜单
 router.post('/manage/menu/add', (req, res) => {
   if (req.body._id) {
-  MenuModel.findOne({_id: req.body._id})
+    MenuModel.findOne({_id: req.body._id})
     .then(menu => {
       menu.children.push(req.body.menu)
       return MenuModel.findOneAndUpdate({_id: req.body._id}, menu )
@@ -104,6 +93,37 @@ router.post('/manage/menu/add', (req, res) => {
     })
   } else {
     MenuModel.create(req.body.menu)
+    .then(menu => {
+      res.send({ status: 0 })
+    })
+    .catch(error => {
+      console.error('添加菜单异常', error)
+      res.send({ status: 1, msg: '添加菜单异常, 请重新尝试' })
+    })
+  }
+})
+// 修改菜单
+router.post('/manage/menu/update', (req, res) => {
+  if (req.body.treeSelected) {
+  MenuModel.findOne({_id: req.body.treeSelected})
+    .then(menu => {
+      const children = menu.children.filter(item => item.key !== req.body.menu.key)
+      menu.children = children
+      return MenuModel.findOneAndUpdate({_id: req.body.treeSelected}, menu )
+    })
+    .then(menu => {
+      res.send({ status: 0 })
+    })
+    .catch(error => {
+      console.error('修改失败', error)
+      res.send({ status: 1, msg: '修改失败, 请重新尝试！' })
+    })
+  } else {
+    MenuModel.findOne({_id: req.body._id})
+    .then(menu => {
+      req.body.menu.children = menu.children
+      return MenuModel.findOneAndUpdate({_id: req.body._id}, req.body.menu )
+    })
     .then(menu => {
       res.send({ status: 0 })
     })

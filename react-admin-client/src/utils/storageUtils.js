@@ -13,8 +13,6 @@ export default {
     removeUser(){
         store.remove(UER_KEY)
     }
-
-
 }
 
 
