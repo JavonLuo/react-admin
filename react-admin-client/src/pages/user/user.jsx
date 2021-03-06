@@ -86,7 +86,7 @@ export default class User extends Component {
       onOk: async () => {
         const result = await reqDeleteUser(user._id)
         if (result.status === 0) {
-          message.success('删除用户成功!')
+          message.success('删除成功!')
           this.getUsers()
         }
       }
@@ -106,7 +106,7 @@ export default class User extends Component {
     const result = await reqAddOrUpdateUser(user)
     // 3. 更新列表显示
     if (result.status === 0) {
-      message.success(`${this.user ? '修改' : '添加'}用户成功`)
+      message.success(`${this.user ? '修改' : '添加'}成功`)
       this.getUsers()
     }
   }
