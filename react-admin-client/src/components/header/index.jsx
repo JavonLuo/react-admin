@@ -79,6 +79,9 @@ class Header extends Component {
                 </div>
                 <Card style={{ margin: '20px 20px 0px 20px' }}>
                     <Breadcrumb>
+                    <Breadcrumb.Item>
+                            {'首页'}
+                        </Breadcrumb.Item>
                         <Breadcrumb.Item>
                             {oneTitle}
                         </Breadcrumb.Item>
