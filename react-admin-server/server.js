@@ -19,7 +19,11 @@ const cookieParser = require('cookie-parser')
 app.use(cookieParser())
 // 声明使用路由器中间件
 const indexRouter = require('./routers')
-app.use('/', indexRouter)  
+app.use('/admin', indexRouter)
+// 解决BrowserRouter刷新404问题 监听所有请求 返回index.html页面
+app.get('*', function (request, response){
+  response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+ })
 // 通过mongoose连接数据库
 mongoose.connect('mongodb://localhost/server_admin', {useNewUrlParser: true,useUnifiedTopology:true})
   .then(() => {

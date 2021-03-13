@@ -106,7 +106,7 @@ module.exports = function(proxy, allowedHost) {
         target:'http://localhost:5000/',
         changeOrigin:true,
         pathRewrite:{
-          '^/admin':''
+          '^/admin':'/admin'
         }
       }
     },
