@@ -42,7 +42,7 @@ jobs:
           # scp参数
           ARGS: "-rltgoDzvO --delete"
           # 源目录
-          SOURCE: "build"
+          SOURCE: "react-admin-client/build"
           # 服务器ip
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           # 用户
