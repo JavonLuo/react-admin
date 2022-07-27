@@ -50,7 +50,7 @@ jobs:
           # 用户
           REMOTE_USER: "root"
           # 目标地址
-          TARGET: "/www/wwwroot"
+          TARGET: "/www/wwwroot/client"
 
       # 上传后端静态资源到服务器
       - name: 发布后端
@@ -67,4 +67,4 @@ jobs:
           # 用户
           REMOTE_USER: "root"
           # 目标地址
-          TARGET: "/www/wwwroot"
+          TARGET: "/www/wwwroot/server"
