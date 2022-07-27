@@ -51,6 +51,7 @@ jobs:
           REMOTE_USER: "root"
           # 目标地址
           TARGET: "/www/wwwroot/admin"
+
       # 上传后端静态资源到服务器
       - name: 发布后端
         uses: easingthemes/ssh-deploy@v2.1.1
