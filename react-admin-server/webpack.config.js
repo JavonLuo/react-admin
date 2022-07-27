@@ -5,7 +5,7 @@ module.exports = {
   target: "node",
   mode: "development",
   output: {
-    path: path.resolve(__dirname, "build"),
+    path: path.resolve(__dirname, "server"),
     filename: "[name].server.js",
     chunkFilename: "[chunkhash:10].chunk.js",
   },

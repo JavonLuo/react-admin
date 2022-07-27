@@ -22,19 +22,21 @@ jobs:
         with:
           node-version: 14.0.0
 
-      # 安装依赖
-      - name: 安装依赖并且打包
+      # 安装前端依赖
+      - name: 安装前端依赖并且打包
         run: |
           cd react-admin-client
           npm install
           npm run build
+      # 安装后端依赖
+      - name: 安装后端依赖并且打包
+        run: |
+          cd react-admin-server
+          npm install
+          npm run build
 
-      # 打包
-      # - name: 打包
-      #   run: npm run build
-
-      # 上传服务器
-      - name: 发布
+      # 上传前端静态资源到服务器
+      - name: 发布前端
         uses: easingthemes/ssh-deploy@v2.1.1
         env:
           # 私钥
@@ -42,10 +44,26 @@ jobs:
           # scp参数
           ARGS: "-rltgoDzvO --delete"
           # 源目录
-          SOURCE: "react-admin-client/build"
+          SOURCE: "react-admin-client/client"
           # 服务器ip
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           # 用户
           REMOTE_USER: "root"
           # 目标地址
-          TARGET: "/www/wwwroot/admin/client"
+          TARGET: "/www/wwwroot/admin"
+      # 上传后端静态资源到服务器
+      - name: 发布后端
+        uses: easingthemes/ssh-deploy@v2.1.1
+        env:
+          # 私钥
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          # scp参数
+          ARGS: "-rltgoDzvO --delete"
+          # 源目录
+          SOURCE: "react-admin-server/server"
+          # 服务器ip
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          # 用户
+          REMOTE_USER: "root"
+          # 目标地址
+          TARGET: "/www/wwwroot/admin"
