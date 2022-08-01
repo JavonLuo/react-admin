@@ -6,18 +6,17 @@ import { Link, withRouter } from 'react-router-dom'
 import { Menu, Icon, Layout, Tooltip } from 'antd'
 import memoryUtils from '../../utils/memoryUtils'
 import store from 'store'
-const { SubMenu } = Menu;
-const { Sider } = Layout;
-
+const { SubMenu } = Menu
+const { Sider } = Layout
 
 class LeftNav extends Component {
   state = {
     collapsed: false,
     isRender: false,
-  };
-  onCollapse = collapsed => {
-    this.setState({ collapsed });
-  };
+  }
+  onCollapse = (collapsed) => {
+    this.setState({ collapsed })
+  }
   // render函数之前先调用gitMenuNodes函数
   componentWillMount() {
     const menus = store.get('menus') || []
@@ -35,8 +34,9 @@ class LeftNav extends Component {
      */
     if (username === 'admin' || isPublic || menus.indexOf(key) !== -1) {
       return true
-    } else if (item.children) { // 4. 如果当前用户有此item的某个子item的权限
-      return !!item.children.find(child => menus.indexOf(child.key) !== -1)
+    } else if (item.children) {
+      // 4. 如果当前用户有此item的某个子item的权限
+      return !!item.children.find((child) => menus.indexOf(child.key) !== -1)
     }
 
     return false
@@ -47,7 +47,9 @@ class LeftNav extends Component {
       if (this.hasAuth(item)) {
         if (item.children && item.children.length) {
           // 如果有子级菜单 那么通过数组find方法判断子菜单的key有没有跟路由匹配的路径相等
-          const openkey = item.children.find(item => path.indexOf(item.key) === 0)
+          const openkey = item.children.find(
+            (item) => path.indexOf(item.key) === 0
+          )
           // 如果有值 说明当前路由匹配子菜单的某一项 保存到组件对象this中
           if (openkey) {
             this.openkey = item.key
@@ -87,34 +89,38 @@ class LeftNav extends Component {
       path = '/product'
     }
     return (
-      <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+      <Sider
+        collapsible
+        collapsed={this.state.collapsed}
+        onCollapse={this.onCollapse}
+      >
         <div>
-          <Link to='/' className={style.leftNav}>
-            <header style={this.state.collapsed ? { justifyContent: 'center' } : null}>
-              {
-
-                this.state.collapsed ?
-                  <Tooltip placement="right" title={'React 后台'}>
-                    <img
-                      src={logo}
-                      // style={!this.state.collapsed ? { margin: '0px 10px' } : null}
-                      alt="" />
-                  </Tooltip>
-                  :
+          <Link to="/" className={style.leftNav}>
+            <header
+              style={this.state.collapsed ? { justifyContent: 'center' } : null}
+            >
+              {this.state.collapsed ? (
+                <Tooltip placement="right" title={'React 后台'}>
                   <img
-                    title={'React 后台'}
                     src={logo}
-                    style={!this.state.collapsed ? { margin: '0px 10px' } : null}
-                    alt="" />
-              }
-              {!this.state.collapsed ?
-                <h1>React 后台</h1> : null
-              }
+                    // style={!this.state.collapsed ? { margin: '0px 10px' } : null}
+                    alt=""
+                  />
+                </Tooltip>
+              ) : (
+                <img
+                  title={'React 后台'}
+                  src={logo}
+                  style={!this.state.collapsed ? { margin: '0px 10px' } : null}
+                  alt=""
+                />
+              )}
+              {!this.state.collapsed ? <h1>React 后台</h1> : null}
             </header>
           </Link>
           <Menu
             mode="inline"
-            theme='dark'
+            theme="dark"
             selectedKeys={path}
             defaultOpenKeys={[this.openkey]}
           >
